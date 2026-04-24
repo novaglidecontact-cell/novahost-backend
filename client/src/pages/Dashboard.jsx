@@ -286,7 +286,7 @@ const Dashboard = () => {
         setFiles(res.data);
         alert(`${filesToUpload.length} fichier(s) importé(s) avec succès !`);
       } catch (err) {
-        alert('Erreur lors de l\\'importation.');
+        alert("Erreur lors de l'importation.");
       }
     }
   };
