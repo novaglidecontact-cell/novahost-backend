@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovaHost | Hébergement Discord Bot Premium</title>
+    <meta name="description" content="Hébergez vos bots Discord avec une performance maximale, une disponibilité 24/7 et une interface intuitive.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #050505;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #5865F2 0%, #a855f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #5865F2 0%, #a855f7 100%);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(88, 101, 242, 0.3);
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-10px);
+            border-color: rgba(88, 101, 242, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(88, 101, 242, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(50px);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 top-0 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center glass rounded-2xl px-6 py-3">
+            <div class="flex items-center gap-2">
+                <div class="w-10 h-10 bg-gradient-to-br from-[#5865F2] to-[#a855f7] rounded-lg flex items-center justify-center">
+                    <i data-lucide="zap" class="text-white w-6 h-6"></i>
+                </div>
+                <span class="text-xl font-bold tracking-tight">Nova<span class="text-[#5865F2]">Host</span></span>
+            </div>
+            
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
+                <a href="#features" class="hover:text-white transition-colors">Fonctionnalités</a>
+                <a href="#pricing" class="hover:text-white transition-colors">Tarifs</a>
+                <a href="#status" class="hover:text-white transition-colors">Statut</a>
+                <a href="#" class="hover:text-white transition-colors">Support</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="#" class="text-sm font-medium hover:text-white transition-colors">Connexion</a>
+                <a href="#" class="btn-primary px-5 py-2.5 rounded-xl text-sm font-semibold">Commencer</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 px-6 overflow-hidden">
+        <div class="glow top-20 left-10"></div>
+        <div class="glow bottom-20 right-10"></div>
+        
+        <div class="max-w-7xl mx-auto text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-8 animate-pulse">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#5865F2] opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-[#5865F2]"></span>
+                </span>
+                <span class="text-xs font-semibold text-gray-300">Nouveau : Processeurs Ryzen 9 7950X disponibles</span>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                Propulsez votre Bot <br/>
+                <span class="text-gradient">Vers le Futur.</span>
+            </h1>
+            
+            <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-10">
+                Hébergement haute performance conçu spécifiquement pour les bots Discord. Uptime 99.9%, protection DDoS avancée et déploiement instantané.
+            </p>
+            
+            <div class="flex flex-col md:flex-row items-center justify-center gap-4">
+                <a href="#" class="btn-primary px-8 py-4 rounded-2xl text-lg font-bold w-full md:w-auto flex items-center justify-center gap-2">
+                    <i data-lucide="rocket" class="w-5 h-5"></i>
+                    Démarrer gratuitement
+                </a>
+                <a href="#features" class="glass px-8 py-4 rounded-2xl text-lg font-bold w-full md:w-auto hover:bg-white/5 transition-all">
+                    Voir les fonctionnalités
+                </a>
+            </div>
+
+            <div class="mt-20 relative">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent z-10"></div>
+                <div class="glass p-4 rounded-3xl animate-float">
+                    <img src="https://images.unsplash.com/photo-1614064641935-4475e8329239?auto=format&fit=crop&q=80&w=2000" alt="Dashboard Preview" class="rounded-2xl border border-white/5">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Pourquoi choisir <span class="text-[#5865F2]">NovaHost</span> ?</h2>
+                <p class="text-gray-400">Des outils puissants pour les développeurs exigeants.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="glass p-8 rounded-3xl card-hover">
+                    <div class="w-12 h-12 bg-[#5865F2]/10 rounded-2xl flex items-center justify-center mb-6">
+                        <i data-lucide="zap" class="text-[#5865F2] w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Vitesse Éclair</h3>
+                    <p class="text-gray-400">Processeurs NVMe SSD et DDR5 pour une latence minimale et une réponse instantanée.</p>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="glass p-8 rounded-3xl card-hover">
+                    <div class="w-12 h-12 bg-purple-500/10 rounded-2xl flex items-center justify-center mb-6">
+                        <i data-lucide="shield-check" class="text-purple-500 w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Sécurité Totale</h3>
+                    <p class="text-gray-400">Protection DDoS de niveau entreprise incluse sur tous les plans sans surcoût.</p>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="glass p-8 rounded-3xl card-hover">
+                    <div class="w-12 h-12 bg-green-500/10 rounded-2xl flex items-center justify-center mb-6">
+                        <i data-lucide="terminal" class="text-green-500 w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Console Temps Réel</h3>
+                    <p class="text-gray-400">Accédez aux logs de votre bot en temps réel et gérez vos fichiers via notre éditeur web.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-20 px-6 bg-gradient-to-b from-[#050505] to-[#0a0a0f]">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Des tarifs <span class="text-gradient">transparents</span></h2>
+                <p class="text-gray-400">Choisissez le plan qui correspond à vos besoins.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Free Plan -->
+                <div class="glass p-10 rounded-3xl border-white/5 relative overflow-hidden group">
+                    <div class="mb-8">
+                        <h3 class="text-xl font-bold mb-2">Gratuit</h3>
+                        <p class="text-gray-400 text-sm">Pour tester et débuter</p>
+                    </div>
+                    <div class="mb-8">
+                        <span class="text-4xl font-bold">0€</span>
+                        <span class="text-gray-400">/mois</span>
+                    </div>
+                    <ul class="space-y-4 mb-10 text-sm text-gray-300">
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="text-[#5865F2] w-4 h-4"></i> 1 Bot Discord</li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="text-[#5865F2] w-4 h-4"></i> 256 MB RAM</li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="text-[#5865F2] w-4 h-4"></i> CPU Partagé</li>
+                        <li class="flex items-center gap-3 opacity-50"><i data-lucide="x" class="text-red-500 w-4 h-4"></i> Uptime 24/7</li>
+                    </ul>
+                    <a href="#" class="block text-center glass py-3 rounded-xl font-semibold hover:bg-white/5 transition-colors">Choisir</a>
+                </div>
+                
+                <!-- Pro Plan -->
+                <div class="glass p-10 rounded-3xl border-[#5865F2]/30 relative overflow-hidden group scale-105 shadow-2xl shadow-[#5865F2]/10">
+                    <div class="absolute top-0 right-0 bg-[#5865F2] text-xs font-bold px-4 py-1 rounded-bl-xl">POPULAIRE</div>
+                    <div class="mb-8">
+                        <h3 class="text-xl font-bold mb-2 text-gradient">Pro</h3>
+                        <p class="text-gray-400 text-sm">Le meilleur rapport qualité/prix</p>
+                    </div>
+                    <div class="mb-8">
+                        <span class="text-4xl font-bold">4.99€</span>
+                        <span class="text-gray-400">/mois</span>
+                    </div>
+                    <ul class="space-y-4 mb-10 text-sm text-gray-300">
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="text-[#5865F2] w-4 h-4"></i> 3 Bots Discord</li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="text-[#5865F2] w-4 h-4"></i> 512 MB RAM</li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="text-[#5865F2] w-4 h-4"></i> CPU Dédié (1 vCore)</li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="text-[#5865F2] w-4 h-4"></i> Uptime 24/7</li>
+                    </ul>
+                    <a href="#" class="block text-center btn-primary py-3 rounded-xl font-semibold">Choisir</a>
+                </div>
+                
+                <!-- Premium Plan -->
+                <div class="glass p-10 rounded-3xl border-white/5 relative overflow-hidden group">
+                    <div class="mb-8">
+                        <h3 class="text-xl font-bold mb-2">Premium</h3>
+                        <p class="text-gray-400 text-sm">Pour les bots massifs</p>
+                    </div>
+                    <div class="mb-8">
+                        <span class="text-4xl font-bold">9.99€</span>
+                        <span class="text-gray-400">/mois</span>
+                    </div>
+                    <ul class="space-y-4 mb-10 text-sm text-gray-300">
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="text-[#5865F2] w-4 h-4"></i> Bots Illimités</li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="text-[#5865F2] w-4 h-4"></i> 2 GB RAM</li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="text-[#5865F2] w-4 h-4"></i> Support Prioritaire 24/7</li>
+                        <li class="flex items-center gap-3"><i data-lucide="check" class="text-[#5865F2] w-4 h-4"></i> Backup Automatique</li>
+                    </ul>
+                    <a href="#" class="block text-center glass py-3 rounded-xl font-semibold hover:bg-white/5 transition-colors">Choisir</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 px-6 border-t border-white/5">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+            <div class="col-span-1 md:col-span-2">
+                <div class="flex items-center gap-2 mb-6">
+                    <div class="w-8 h-8 bg-gradient-to-br from-[#5865F2] to-[#a855f7] rounded-lg flex items-center justify-center">
+                        <i data-lucide="zap" class="text-white w-5 h-5"></i>
+                    </div>
+                    <span class="text-lg font-bold">NovaHost</span>
+                </div>
+                <p class="text-gray-400 max-w-sm">
+                    L'hébergement nouvelle génération pour vos bots Discord. Performance, simplicité et fiabilité.
+                </p>
+            </div>
+            
+            <div>
+                <h4 class="font-bold mb-6">Plateforme</h4>
+                <ul class="space-y-4 text-sm text-gray-400">
+                    <li><a href="#" class="hover:text-white transition-colors">Accueil</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Fonctionnalités</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Tarifs</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Statut</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="font-bold mb-6">Légal</h4>
+                <ul class="space-y-4 text-sm text-gray-400">
+                    <li><a href="#" class="hover:text-white transition-colors">CGU / CGV</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Confidentialité</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Mentions Légales</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto mt-12 pt-12 border-t border-white/5 text-center text-sm text-gray-500">
+            © 2026 NovaHost. Tous droits réservés. Design by NovaTeam.
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

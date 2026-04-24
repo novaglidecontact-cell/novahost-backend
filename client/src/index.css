@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@theme {
+  --color-discord: #5865F2;
+  --color-dark: #050505;
+  --color-dark-accent: #0a0a0f;
+  --font-outfit: "Outfit", sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-dark text-white font-outfit overflow-x-hidden;
+  }
+}
+
+@utility glass {
+  @apply bg-white/5 backdrop-blur-lg border border-white/5;
+}
+
+@utility text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-discord to-purple-500;
+}
+
+@utility btn-primary {
+  @apply bg-gradient-to-r from-discord to-purple-500 hover:translate-y-[-2px] transition-all duration-300 shadow-lg shadow-discord/20;
+}
