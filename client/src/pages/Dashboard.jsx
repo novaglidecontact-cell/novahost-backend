@@ -710,8 +710,17 @@ const Dashboard = () => {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="relative w-full max-w-5xl h-[700px] glass overflow-hidden rounded-3xl flex flex-col"
+              className={`relative w-full max-w-5xl h-[700px] glass overflow-hidden rounded-3xl flex flex-col transition-all ${isDragging ? 'border-discord border-4 scale-[1.02]' : ''}`}
+              onDragEnter={(e) => { e.preventDefault(); setIsDragging(true); }}
+              onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+              onDragLeave={(e) => { e.preventDefault(); setIsDragging(false); }}
+              onDrop={handleDrop}
             >
+              {isDragging && (
+                <div className="absolute inset-0 flex items-center justify-center z-50 pointer-events-none bg-black/80 backdrop-blur-md text-discord font-bold text-3xl">
+                  Lâchez les fichiers ici ! 🚀
+                </div>
+              )}
               <div className="p-6 border-b border-white/5 flex justify-between items-center bg-white/2">
                 <div className="flex items-center gap-3">
                   <FileCode className="w-5 h-5 text-discord" />
@@ -732,17 +741,7 @@ const Dashboard = () => {
 
               <div className="flex-1 flex overflow-hidden">
                 {/* File Sidebar */}
-                <div 
-                  className={`w-64 border-r border-white/5 bg-black/40 flex flex-col transition-all relative ${isDragging ? 'border-discord border-2 bg-discord/10' : ''}`}
-                  onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-                  onDragLeave={(e) => { e.preventDefault(); setIsDragging(false); }}
-                  onDrop={handleDrop}
-                >
-                  {isDragging && (
-                    <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none bg-black/50 backdrop-blur-sm text-discord font-bold text-center p-4">
-                      Déposez les fichiers/dossiers ici
-                    </div>
-                  )}
+                <div className="w-64 border-r border-white/5 bg-black/40 flex flex-col">
                   <div className="p-4 flex justify-between items-center border-b border-white/5">
                     <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Fichiers</span>
                     <button 
