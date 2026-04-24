@@ -249,6 +249,10 @@ const Dashboard = () => {
             reader.readAsText(file);
           });
         } else if (item.isDirectory) {
+          if (item.name === 'node_modules' || item.name === '.git') {
+            resolve();
+            return;
+          }
           const dirReader = item.createReader();
           dirReader.readEntries(async entries => {
             for (let i = 0; i < entries.length; i++) {
