@@ -28,7 +28,12 @@ const botManager = {
         // 2. Write all files
         if (bot.files && bot.files.length > 0) {
             bot.files.forEach(file => {
-                fs.writeFileSync(path.join(botDir, file.name), file.content);
+                const filePath = path.join(botDir, file.name);
+                const fileDir = path.dirname(filePath);
+                if (!fs.existsSync(fileDir)) {
+                    fs.mkdirSync(fileDir, { recursive: true });
+                }
+                fs.writeFileSync(filePath, file.content);
             });
         }
 
