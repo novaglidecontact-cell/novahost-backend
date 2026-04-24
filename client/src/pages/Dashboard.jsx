@@ -35,6 +35,7 @@ const Dashboard = () => {
   const [files, setFiles] = useState([]);
   const [currentFile, setCurrentFile] = useState('index.js');
   const [code, setCode] = useState('');
+  const [isDragging, setIsDragging] = useState(false);
   const [socket, setSocket] = useState(null);
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') || '{}'));
   const [activeTab, setActiveTab] = useState('overview'); // overview, bots, settings
@@ -221,6 +222,72 @@ const Dashboard = () => {
       alert('Fichier sauvegardé !');
     } catch (err) {
       alert('Erreur lors de la sauvegarde.');
+    }
+  };
+
+  const handleDrop = async (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+
+    const items = e.dataTransfer.items;
+    if (!items) return;
+
+    const filesToUpload = [];
+
+    const traverseFileTree = (item, path = '') => {
+      return new Promise((resolve) => {
+        if (item.isFile) {
+          item.file(file => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              filesToUpload.push({
+                name: path + file.name,
+                content: e.target.result
+              });
+              resolve();
+            };
+            reader.readAsText(file);
+          });
+        } else if (item.isDirectory) {
+          const dirReader = item.createReader();
+          dirReader.readEntries(async entries => {
+            for (let i = 0; i < entries.length; i++) {
+              await traverseFileTree(entries[i], path + item.name + '/');
+            }
+            resolve();
+          });
+        }
+      });
+    };
+
+    const promises = [];
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i].webkitGetAsEntry();
+      if (item) {
+        promises.push(traverseFileTree(item));
+      }
+    }
+
+    await Promise.all(promises);
+
+    if (filesToUpload.length > 0) {
+      try {
+        const token = localStorage.getItem('token');
+        for(let f of filesToUpload) {
+             await axios.post(`${API_URL}/api/files/${showEditor._id}`, 
+               { name: f.name, content: f.content },
+               { headers: { Authorization: `Bearer ${token}` } }
+             );
+        }
+        // Refresh files list
+        const res = await axios.get(`${API_URL}/api/files/${showEditor._id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setFiles(res.data);
+        alert(`${filesToUpload.length} fichier(s) importé(s) avec succès !`);
+      } catch (err) {
+        alert('Erreur lors de l\\'importation.');
+      }
     }
   };
 
@@ -665,7 +732,17 @@ const Dashboard = () => {
 
               <div className="flex-1 flex overflow-hidden">
                 {/* File Sidebar */}
-                <div className="w-64 border-r border-white/5 bg-black/40 flex flex-col">
+                <div 
+                  className={`w-64 border-r border-white/5 bg-black/40 flex flex-col transition-all relative ${isDragging ? 'border-discord border-2 bg-discord/10' : ''}`}
+                  onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+                  onDragLeave={(e) => { e.preventDefault(); setIsDragging(false); }}
+                  onDrop={handleDrop}
+                >
+                  {isDragging && (
+                    <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none bg-black/50 backdrop-blur-sm text-discord font-bold text-center p-4">
+                      Déposez les fichiers/dossiers ici
+                    </div>
+                  )}
                   <div className="p-4 flex justify-between items-center border-b border-white/5">
                     <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Fichiers</span>
                     <button 
