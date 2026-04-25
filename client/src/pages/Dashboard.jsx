@@ -867,6 +867,49 @@ const Dashboard = () => {
 
         {activeTab === 'database' && (
           <div className="space-y-6">
+            <div className="glass p-8 rounded-3xl">
+              <div className="flex justify-between items-start mb-8">
+                <div>
+                  <h2 className="text-2xl font-bold">MySQL Database</h2>
+                  <p className="text-gray-400 text-sm mt-1">Connectez votre bot à une vraie base de données SQL.</p>
+                </div>
+                <a 
+                  href="https://demo.phpmyadmin.net/master-config/index.php" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-6 py-3 bg-orange-500/10 text-orange-500 hover:bg-orange-500 hover:text-white rounded-xl font-bold transition-all border border-orange-500/20"
+                >
+                  <ExternalLink className="w-4 h-4" /> phpMyAdmin
+                </a>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
+                  <p className="text-xs text-gray-500 uppercase font-bold mb-1">Host</p>
+                  <p className="font-mono text-sm text-discord truncate">mysql-e64ba5a-novaglide-9914.i.aivencloud.com</p>
+                </div>
+                <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
+                  <p className="text-xs text-gray-500 uppercase font-bold mb-1">Port</p>
+                  <p className="font-mono text-sm text-discord">17442</p>
+                </div>
+                <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
+                  <p className="text-xs text-gray-500 uppercase font-bold mb-1">User</p>
+                  <p className="font-mono text-sm text-discord">avnadmin</p>
+                </div>
+                <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
+                  <p className="text-xs text-gray-500 uppercase font-bold mb-1">Password</p>
+                  <div className="flex justify-between items-center">
+                    <p className="font-mono text-sm text-discord">••••••••••••</p>
+                    <button className="text-xs text-gray-500 hover:text-white">Copier</button>
+                  </div>
+                </div>
+                <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
+                  <p className="text-xs text-gray-500 uppercase font-bold mb-1">Database</p>
+                  <p className="font-mono text-sm text-discord">defaultdb</p>
+                </div>
+              </div>
+            </div>
+
             {/* Bot Selector for DB */}
             <div className="flex gap-4 overflow-x-auto pb-2">
               {bots.map(bot => (
