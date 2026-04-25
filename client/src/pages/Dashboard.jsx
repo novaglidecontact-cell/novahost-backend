@@ -459,6 +459,7 @@ const Dashboard = () => {
 
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto p-10">
+        <>
         {/* Expiration Banner for Free Users */}
         {user.plan === 'Free' && (
           <div className="mb-8 p-4 bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 rounded-2xl flex justify-between items-center">
@@ -946,6 +947,7 @@ const Dashboard = () => {
             </div>
           </div>
         )}
+        </>
       </main>
 
       {/* Add/Edit Data Modal */}
