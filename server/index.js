@@ -89,6 +89,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/bots', require('./routes/bots'));
 app.use('/api/files', require('./routes/files'));
+app.use('/api/data', require('./routes/data'));
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
