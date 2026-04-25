@@ -17,11 +17,25 @@ import {
   Search,
   FileCode,
   Save,
-  Trash2
+  Trash2,
+  HardDrive,
+  ChevronRight,
+  MoreVertical,
+  ExternalLink,
+  Zap
 } from 'lucide-react';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import { io } from 'socket.io-client';
+import { 
+  AreaChart, 
+  Area, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer 
+} from 'recharts';
 
 const Dashboard = () => {
   const [bots, setBots] = useState([]);
@@ -36,10 +50,39 @@ const Dashboard = () => {
   const [currentFile, setCurrentFile] = useState('index.js');
   const [code, setCode] = useState('');
   const [isDragging, setIsDragging] = useState(false);
+  const [botData, setBotData] = useState([]);
+  const [selectedBotForDb, setSelectedBotForDb] = useState(null);
+  const [selectedBotDetail, setSelectedBotDetail] = useState(null);
+  const [showDataModal, setShowDataModal] = useState(false);
+  const [newDataKey, setNewDataKey] = useState('');
+  const [newDataValue, setNewDataValue] = useState('');
   const [socket, setSocket] = useState(null);
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') || '{}'));
-  const [activeTab, setActiveTab] = useState('overview'); // overview, bots, settings
+  const [activeTab, setActiveTab] = useState('overview'); // overview, bots, settings, database
   const navigate = useNavigate();
+
+  // Fake stats data for charts
+  const [statsData, setStatsData] = useState(
+    Array.from({ length: 20 }, (_, i) => ({
+      time: i,
+      cpu: Math.floor(Math.random() * 5) + 2,
+      ram: Math.floor(Math.random() * 10) + 40
+    }))
+  );
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+        setStatsData(prev => [
+            ...prev.slice(1),
+            { 
+                time: prev[prev.length-1].time + 1,
+                cpu: Math.floor(Math.random() * 5) + 2,
+                ram: Math.floor(Math.random() * 5) + 42
+            }
+        ]);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
 
   useEffect(() => {
@@ -291,6 +334,52 @@ const Dashboard = () => {
     }
 
     await Promise.all(promises);
+    // ... logic already there
+  };
+
+  const fetchBotData = async (botId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await axios.get(`${API_URL}/api/data/${botId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setBotData(res.data);
+      setSelectedBotForDb(botId);
+      setActiveTab('database');
+    } catch (err) {
+      alert('Erreur lors de la récupération des données.');
+    }
+  };
+
+  const handleSaveData = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post(`${API_URL}/api/data/${selectedBotForDb}`, 
+        { key: newDataKey, value: newDataValue },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setNewDataKey('');
+      setNewDataValue('');
+      setShowDataModal(false);
+      fetchBotData(selectedBotForDb);
+    } catch (err) {
+      alert('Erreur lors de la sauvegarde de la donnée.');
+    }
+  };
+
+  const handleDeleteData = async (key) => {
+    if (!confirm(`Supprimer la clé "${key}" ?`)) return;
+    try {
+      const token = localStorage.getItem('token');
+      await axios.delete(`${API_URL}/api/data/${selectedBotForDb}/${key}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      fetchBotData(selectedBotForDb);
+    } catch (err) {
+      alert('Erreur lors de la suppression.');
+    }
+  };
 
     if (filesToUpload.length > 0) {
       try {
@@ -349,6 +438,17 @@ const Dashboard = () => {
           >
             <Settings className="w-5 h-5" /> Paramètres
           </button>
+          <button 
+            onClick={() => {
+                if (bots.length > 0) fetchBotData(bots[0]._id);
+                else setActiveTab('database');
+            }}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+              activeTab === 'database' ? 'bg-discord/10 text-discord font-medium' : 'hover:bg-white/5 text-gray-400 hover:text-white'
+            }`}
+          >
+            <Database className="w-5 h-5" /> NovaDB
+          </button>
         </nav>
 
         <button 
@@ -383,19 +483,29 @@ const Dashboard = () => {
               {activeTab === 'overview' && `Bonjour, ${user.username} 👋`}
               {activeTab === 'bots' && 'Mes Instances'}
               {activeTab === 'settings' && 'Paramètres du Compte'}
+              {activeTab === 'database' && 'NovaDB Manager'}
             </h1>
             <p className="text-gray-400 mt-1">
               {activeTab === 'overview' && 'Gérez vos instances et surveillez leurs performances.'}
               {activeTab === 'bots' && 'Liste complète de vos bots Discord hébergés.'}
               {activeTab === 'settings' && 'Gérez vos informations et votre abonnement.'}
+              {activeTab === 'database' && 'Gérez les données persistantes de vos bots (Style phpMyAdmin).'}
             </p>
           </div>
-          {activeTab !== 'settings' && (
+          {activeTab !== 'settings' && activeTab !== 'database' && (
             <button 
               onClick={() => setShowAddModal(true)}
               className="btn-primary flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-white"
             >
               <Plus className="w-5 h-5" /> Ajouter un Bot
+            </button>
+          )}
+          {activeTab === 'database' && selectedBotForDb && (
+            <button 
+              onClick={() => setShowDataModal(true)}
+              className="btn-primary flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-white"
+            >
+              <Plus className="w-5 h-5" /> Ajouter une Donnée
             </button>
           )}
         </header>
@@ -573,18 +683,162 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <div className="glass p-8 rounded-3xl border border-discord/20">
-              <div className="flex justify-between items-center mb-6">
-                <div>
-                  <h3 className="text-xl font-bold">Votre Plan : {user.plan}</h3>
-                  <p className="text-gray-400 text-sm">Prochaine facturation : Jamais (Gratuit)</p>
-                </div>
-                <button className="btn-primary px-6 py-2 rounded-xl text-sm font-bold">Passer en PRO</button>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'database' && (
+          <div className="space-y-6">
+            {/* Bot Selector for DB */}
+            <div className="flex gap-4 overflow-x-auto pb-2">
+              {bots.map(bot => (
+                <button 
+                  key={bot._id}
+                  onClick={() => fetchBotData(bot._id)}
+                  className={`px-6 py-3 rounded-xl font-bold transition-all whitespace-nowrap ${
+                    selectedBotForDb === bot._id ? 'bg-discord text-white' : 'glass text-gray-400 hover:text-white'
+                  }`}
+                >
+                  {bot.name}
+                </button>
+              ))}
+            </div>
+
+            <div className="glass rounded-3xl overflow-hidden">
+              <div className="p-6 border-b border-white/5 flex justify-between items-center bg-white/2">
+                <h2 className="text-xl font-bold flex items-center gap-2">
+                   <Database className="w-5 h-5 text-discord" /> Table des Données
+                </h2>
+              </div>
+              
+              <div className="overflow-x-auto">
+                <table className="w-full text-left">
+                  <thead>
+                    <tr className="text-gray-500 text-sm border-b border-white/5">
+                      <th className="px-8 py-4 font-medium">Clé (Key)</th>
+                      <th className="px-8 py-4 font-medium">Valeur (Value)</th>
+                      <th className="px-8 py-4 font-medium">Dernière modification</th>
+                      <th className="px-8 py-4 font-medium text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5">
+                    {botData.length === 0 ? (
+                      <tr>
+                        <td colSpan="4" className="px-8 py-20 text-center text-gray-500">
+                          {selectedBotForDb ? "Aucune donnée enregistrée pour ce bot." : "Veuillez sélectionner un bot pour voir ses données."}
+                        </td>
+                      </tr>
+                    ) : (
+                      botData.map(entry => (
+                        <tr key={entry.key} className="hover:bg-white/2 transition-all group">
+                          <td className="px-8 py-6">
+                            <code className="bg-white/5 px-2 py-1 rounded text-discord text-sm font-bold">{entry.key}</code>
+                          </td>
+                          <td className="px-8 py-6">
+                            <span className="text-gray-300 font-mono text-sm">{JSON.stringify(entry.value)}</span>
+                          </td>
+                          <td className="px-8 py-6 text-sm text-gray-500">
+                            {new Date(entry.updatedAt).toLocaleString()}
+                          </td>
+                          <td className="px-8 py-6 text-right">
+                            <button 
+                              onClick={() => {
+                                setNewDataKey(entry.key);
+                                setNewDataValue(typeof entry.value === 'object' ? JSON.stringify(entry.value) : entry.value);
+                                setShowDataModal(true);
+                              }}
+                              className="p-2 rounded-lg hover:bg-white/5 text-gray-400 hover:text-white transition-all"
+                              title="Modifier"
+                            >
+                              <RefreshCw className="w-4 h-4" />
+                            </button>
+                            <button 
+                              onClick={() => handleDeleteData(entry.key)}
+                              className="p-2 rounded-lg hover:bg-red-500/10 text-red-500 transition-all" 
+                              title="Supprimer"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
         )}
       </main>
+
+      {/* Add/Edit Data Modal */}
+      <AnimatePresence>
+        {showDataModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
+            <motion.div 
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }} 
+              exit={{ opacity: 0 }}
+              onClick={() => setShowDataModal(false)}
+              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            ></motion.div>
+            
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative w-full max-w-lg glass p-8 rounded-3xl"
+            >
+              <div className="flex justify-between items-center mb-8">
+                <h2 className="text-2xl font-bold">Gérer une Donnée</h2>
+                <button onClick={() => setShowDataModal(false)} className="p-2 hover:bg-white/5 rounded-lg transition-all">
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              <form onSubmit={handleSaveData} className="space-y-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-400 mb-2">Clé (Key)</label>
+                  <input 
+                    type="text" 
+                    required
+                    value={newDataKey}
+                    onChange={(e) => setNewDataKey(e.target.value)}
+                    placeholder="Ex: money_user_123"
+                    className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 focus:border-discord/50 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-400 mb-2">Valeur (Value)</label>
+                  <textarea 
+                    required
+                    value={newDataValue}
+                    onChange={(e) => setNewDataValue(e.target.value)}
+                    placeholder="Ex: 500 ou { 'level': 1 }"
+                    className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 h-32 focus:border-discord/50 outline-none font-mono"
+                  />
+                </div>
+
+                <div className="flex gap-4 pt-4">
+                  <button 
+                    type="button"
+                    onClick={() => setShowDataModal(false)}
+                    className="flex-1 glass py-3 rounded-xl font-bold"
+                  >
+                    Annuler
+                  </button>
+                  <button 
+                    type="submit"
+                    className="flex-1 btn-primary py-3 rounded-xl font-bold text-white"
+                  >
+                    Sauvegarder
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* Add Bot Modal */}
       <AnimatePresence>
