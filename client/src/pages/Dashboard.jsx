@@ -265,10 +265,28 @@ const Dashboard = () => {
     };
 
     const promises = [];
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i].webkitGetAsEntry();
-      if (item) {
+    if (items.length === 1) {
+      const item = items[0].webkitGetAsEntry();
+      if (item && item.isDirectory) {
+        // Mode "FileZilla" : Si on glisse un seul dossier, on importe son contenu à la racine
+        const dirReader = item.createReader();
+        promises.push(new Promise((resolve) => {
+          dirReader.readEntries(async entries => {
+            for (let i = 0; i < entries.length; i++) {
+              await traverseFileTree(entries[i]);
+            }
+            resolve();
+          });
+        }));
+      } else if (item) {
         promises.push(traverseFileTree(item));
+      }
+    } else {
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i].webkitGetAsEntry();
+        if (item) {
+          promises.push(traverseFileTree(item));
+        }
       }
     }
 
