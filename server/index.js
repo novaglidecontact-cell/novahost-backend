@@ -21,8 +21,37 @@ app.use(express.json());
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/novahost')
-    .then(() => console.log('✅ MongoDB Connected'))
+    .then(() => {
+        console.log('✅ MongoDB Connected');
+        // Auto-start bots on boot
+        startAllBots();
+    })
     .catch(err => console.error('❌ MongoDB Connection Error:', err));
+
+async function startAllBots() {
+    const Bot = require('./models/Bot');
+    const botManager = require('./botManager');
+    
+    console.log('🔄 Auto-starting online bots...');
+    try {
+        const onlineBots = await Bot.find({ status: 'online' });
+        console.log(`📡 Found ${onlineBots.length} bots to restart.`);
+        for (const bot of onlineBots) {
+            await botManager.startBot(bot);
+        }
+    } catch (err) {
+        console.error('❌ Error auto-starting bots:', err);
+    }
+}
+
+// Keep-Alive Ping (Try to stay awake)
+const APP_URL = 'https://novahost-backend.onrender.com';
+setInterval(async () => {
+    try {
+        await fetch(APP_URL);
+        console.log('💓 Keep-alive ping sent');
+    } catch (e) {}
+}, 10 * 60 * 1000); // 10 minutes
 
 // Socket.io Connection
 io.on('connection', (socket) => {
